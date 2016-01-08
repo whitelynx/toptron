@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>TopTron</title>
+		<style>
+			html {
+				background: black;
+				color: white;
+				font-family: sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>TopTron</h1>
+		<p>
+			We are using io.js <script>document.write(process.version)</script>
+			and Electron <script>document.write(process.versions['electron'])</script>.
+		</p>
+
+		<app></app>
+
+		<script>
+			var Vue = require('vue');
+			Vue.config.debug = true;
+
+			var app = require('./components/app.vue');
+
+			new Vue({
+				el: 'body',
+				components: {
+					app: app
+				}
+			});
+		</script>
+	</body>
+</html>
