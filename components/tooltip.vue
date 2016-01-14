@@ -19,6 +19,15 @@
 			border-top-left-radius: 0;
 			border-top-right-radius: 0;
 		}
+
+		&.left.aligned {
+			left: 0;
+		}
+
+		&.right.aligned {
+			left: auto;
+			right: 0;
+		}
 	}
 
 	:hover > div.tooltip {
