@@ -346,7 +346,6 @@ class ProcReader extends EventEmitter
 
     readProcesses()
     {
-        return [];
         //TODO: Not sure which variant is faster/more correct...
         return glob('/proc/+([0-9])/')
         //return glob('/proc/*/')
@@ -363,7 +362,7 @@ class ProcReader extends EventEmitter
                     (stat, statm, command, cwd) => {
                         stat.stateDesc = procStateDescriptions[stat.state];
                         delete stat._;
-                        return _.assign({ pid: pid, dirname, command, cwd }, stat, statm);
+                        return _.assign({ pid: parseInt(pid, 10), dirname, command, cwd }, stat, statm);
                     }
                 );
             });
