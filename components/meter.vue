@@ -6,14 +6,14 @@
 		padding: 0;
 
 		& > figcaption {
-			width: 5em;
+			width: 4em;
 		}
 
 		& > .bar {
 			position: absolute;
 			top: 0;
 			bottom: 0;
-			left: 5em;
+			left: 4em;
 			right: 0;
 			margin: 0;
 			padding: 0;
@@ -27,7 +27,7 @@
 				height: 1em;
 				margin: 0;
 				padding: 0;
-				transition: width 150ms ease-in-out;
+				transition: width 50ms ease-in-out;
 			}
 
 			& > .label {
