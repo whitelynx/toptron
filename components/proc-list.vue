@@ -3,114 +3,128 @@
 		cursor: pointer;
 	}
 
-	.menuButton {
-		//float: right;
-		position: fixed;
-		top: 0;
-		right: 0;
-		font-size: smaller;
-		padding: 0.5em;
-		position: relative;
-		.clickable();
-
-		&:hover {
-			background-color: #222;
-		}
-
-		.menu {
-			margin: 0;
-			padding-left: 0;
-			list-style-type: none;
-
-			li.checkable {
-				white-space: nowrap;
-
-				&::before {
-					display: inline-block;
-					width: 1em;
-					height: 1em;
-					margin-right: 0.5em;
-					border: 1px solid white;
-					text-align: center;
-					vertical-align: middle;
-					content: ' ';
-				}
-
-				&.checked::before {
-					content: '✓';
-				}
-			}
-		}
-	}
-
 	div.processList {
-		//max-width: 100%;
-		overflow: auto;
-		font-family: monospace;
+		position: relative;
+		margin: 0;
+		padding: 0;
 
-		table {
-			th:nth-child(2n), td:nth-child(2n), thead tr:nth-child(2n+1), tbody tr:nth-child(2n) {
-				background-color: rgba(31, 31, 31, 0.5);
+		.menuButton {
+			//float: right;
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 1em;
+			height: 1em;
+			padding: 0.4em;
+			z-index: 10;
+			font-size: smaller;
+			text-align: center;
+			.clickable();
+			background-color: #222;
+
+			&:hover {
+				background-color: #333;
 			}
 
-			th {
-				font-size: small;
-				white-space: nowrap;
+			.menu {
+				margin: 0;
+				padding-left: 0;
+				list-style-type: none;
+				text-align: left;
 
-				&.sortAsc::after {
-					display: inline-block;
-					margin: -1px 0 -1px 0.25em;
-					padding: 0;
-					font-size: smaller;
-					content: ' ⏶';
-				}
-				&.sortDesc::after {
-					display: inline-block;
-					margin: -1px 0 -1px 0.25em;
-					padding: 0;
-					font-size: smaller;
-					content: ' ⏷';
+				li.checkable {
+					white-space: nowrap;
+
+					&::before {
+						display: inline-block;
+						width: 1em;
+						height: 1em;
+						margin-right: 0.5em;
+						border: 1px solid white;
+						text-align: center;
+						vertical-align: middle;
+						content: ' ';
+					}
+
+					&.checked::before {
+						content: '✓';
+					}
 				}
 			}
+		}
 
-			td {
-				font-size: smaller;
-				max-width: 100em;
-				max-height: 1em;
-				white-space: nowrap;
-				overflow: hidden;
+		.scroller {
+			position: relative;
+			//max-width: 100%;
+			overflow: auto;
+			font-family: monospace;
+
+			table {
+				th:nth-child(2n), td:nth-child(2n), thead tr:nth-child(2n+1), tbody tr:nth-child(2n) {
+					background-color: rgba(31, 31, 31, 0.5);
+				}
+
+				th {
+					font-size: small;
+					white-space: nowrap;
+
+					&.sortAsc::after {
+						display: inline-block;
+						margin: -1px 0 -1px 0.25em;
+						padding: 0;
+						font-size: smaller;
+						content: ' ⏶';
+					}
+					&.sortDesc::after {
+						display: inline-block;
+						margin: -1px 0 -1px 0.25em;
+						padding: 0;
+						font-size: smaller;
+						content: ' ⏷';
+					}
+				}
+
+				td {
+					font-size: smaller;
+					max-width: 100em;
+					max-height: 1em;
+					white-space: nowrap;
+					overflow: hidden;
+				}
 			}
 		}
 	}
 </style>
 
 <template>
-	<div class="menuButton">
-		☰<!--&U2630;-->
-
-		<tooltip class="right aligned">
-			<ul class="menu">
-				<li v-for="column in columns" class="checkable" :class="{ checked: column.enabled }"
-					@click="column.enabled = !column.enabled">{{ column.title }}</li>
-			</ul>
-		</tooltip>
-	</div>
 	<div class="processList">
-		<table>
-			<thead>
-				<tr>
-					<th v-for="column in columns" v-if="column.enabled" class="clickable"
-						:class="{ sortAsc: sortKey == column.key && sortOrder > 0, sortDesc: sortKey == column.key && sortOrder < 0 }"
-						@click="setSort(column.key)">{{ column.title }}</th>
-				</tr>
-			</thead>
+		<div class="menuButton">
+			☰<!--&U2630;-->
 
-			<tbody>
-				<tr v-for="process in processes | orderBy sortKey sortOrder | limitBy maxItems">
-					<td v-for="column in columns" v-if="column.enabled">{{ lookup(process, column.key) }}</td>
-				</tr>
-			</tbody>
-		</table>
+			<tooltip class="right aligned">
+				<ul class="menu">
+					<li v-for="column in columns" class="checkable" :class="{ checked: column.enabled }"
+						@click="column.enabled = !column.enabled">{{ column.title }}</li>
+				</ul>
+			</tooltip>
+		</div>
+		<div class="scroller">
+			<table>
+				<thead>
+					<tr>
+						<th v-for="column in columns" v-if="column.enabled" class="clickable"
+							:class="{ sortAsc: sortKey == column.key && sortOrder > 0, sortDesc: sortKey == column.key && sortOrder < 0 }"
+							@click="setSort(column.key)">{{ column.title }}</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr v-for="process in processes | orderBy sortKey sortOrder | limitBy maxItems">
+						<td v-for="column in columns" v-if="column.enabled">{{ lookup(process, column.key) }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </template>
 
